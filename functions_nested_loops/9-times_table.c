@@ -24,11 +24,11 @@ void times_table(void)
 				_putchar(',');
 				_putchar(' ');
 			}
-			if (tens == 0 && j != 0)
+			if (dixaine == 0 && j != 0)
 				_putchar(' ');
-			if (tens != 0)
-				_putchar(tens + '0');
-			_putchar(ones + '0');
+			if (dixaine != 0)
+				_putchar(dixaine + '0');
+			_putchar(chiffre + '0');
 		}
 		_putchar('\n');
 	}
