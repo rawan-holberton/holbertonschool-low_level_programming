@@ -20,12 +20,12 @@ void jack_bauer(void)
 			m1 = (minute / 10) + '0';
 			m2 = (minute % 10) + '0';
 
-			putchar(h1);
-			putchar(h2);
-			putchar(':');
-			putchar(m1);
-			putchar(m2);
-			putchar('\n');
+			_putchar(h1);
+			_putchar(h2);
+			_putchar(':');
+			_putchar(m1);
+			_putchar(m2);
+			_putchar('\n');
 		}
 	}
 }
