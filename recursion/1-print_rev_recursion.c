@@ -1,9 +1,12 @@
 #include "main.h"
 #include <stdio.h>
 
-/*
- * Write a function that prints a string in reverse.
- * Prototype: void _print_rev_recursion(char *s);
+/**
+ * _print_rev_recursion - prints a string in reverse
+ * @s: pointer to the string to be printed
+ *
+ * This function prints the characters of a string in reverse order
+ * using recursion, followed by a newline.
  */
 
 void _print_rev_recursion(char *s)
