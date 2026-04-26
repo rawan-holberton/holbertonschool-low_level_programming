@@ -3,19 +3,74 @@
 #include "hash_tables.h"
 
 /**
+ * update_value - updates the value of an existing node
+ * @node: node to update
+ * @value: new value to assign
+ *
+ * Return: 1 on success, 0 on failure
+ */
+static int update_value(hash_node_t *node, const char *value)
+{
+	char *new_value;
+
+	new_value = strdup(value);
+	if (new_value == NULL)
+		return (0);
+
+	free(node->value);
+	node->value = new_value;
+
+	return (1);
+}
+
+/**
+ * create_node - creates a new hash node
+ * @key: key string
+ * @value: value string
+ *
+ * Return: pointer to new node, or NULL if failed
+ */
+static hash_node_t *create_node(const char *key, const char *value)
+{
+	hash_node_t *node;
+
+	node = malloc(sizeof(hash_node_t));
+	if (node == NULL)
+		return (NULL);
+
+	node->key = strdup(key);
+	if (node->key == NULL)
+	{
+		free(node);
+		return (NULL);
+	}
+
+	node->value = strdup(value);
+	if (node->value == NULL)
+	{
+		free(node->key);
+		free(node);
+		return (NULL);
+	}
+
+	node->next = NULL;
+
+	return (node);
+}
+
+/**
  * hash_table_set - adds or updates a key/value pair in the hash table
  * @ht: hash table
- * @key: key (cannot be empty)
- * @value: value associated with key (must be duplicated)
+ * @key: key string (cannot be empty)
+ * @value: value string
  *
- * Return: 1 if success, 0 if failed
+ * Return: 1 on success, 0 on failure
  */
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
 	unsigned long int index;
-	hash_node_t *node;
 	hash_node_t *tmp;
-	char *value_copy, *key_copy;
+	hash_node_t *node;
 
 	if (ht == NULL || key == NULL || *key == '\0' || value == NULL)
 		return (0);
@@ -27,40 +82,14 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	while (tmp != NULL)
 	{
 		if (strcmp(tmp->key, key) == 0)
-		{
-			value_copy = strdup(value);
-			if (value_copy == NULL)
-				return (0);
+			return (update_value(tmp, value));
 
-			free(tmp->value);
-			tmp->value = value_copy;
-
-			return (1);
-		}
 		tmp = tmp->next;
 	}
 
-	node = malloc(sizeof(hash_node_t));
+	node = create_node(key, value);
 	if (node == NULL)
 		return (0);
-
-	key_copy = strdup(key);
-	if (key_copy == NULL)
-	{
-		free(node);
-		return (0);
-	}
-
-	value_copy = strdup(value);
-	if (value_copy == NULL)
-	{
-		free(key_copy);
-		free(node);
-		return (0);
-	}
-
-	node->key = key_copy;
-	node->value = value_copy;
 
 	node->next = ht->array[index];
 	ht->array[index] = node;
