@@ -30,7 +30,7 @@ int _atoi(char *s)
 	}
 
 	if (sign == 1)
-		return (int)result;
+		return ((int)result);
 
 	if (result > 2147483647)
 		return (-2147483648);
