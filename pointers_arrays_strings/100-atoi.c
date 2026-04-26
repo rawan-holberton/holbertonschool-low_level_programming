@@ -1,10 +1,10 @@
 #include "main.h"
 
 /**
- * _atoi - converts a string to an integer
+ * _atoi - converts string to integer safely
  * @s: input string
  *
- * Return: int converted value
+ * Return: int
  */
 int _atoi(char *s)
 {
@@ -29,8 +29,11 @@ int _atoi(char *s)
 		i++;
 	}
 
-	if (sign == -1)
-		return (-((int)result));
+	if (sign == 1)
+		return (int)result;
 
-	return ((int)result);
+	if (result > 2147483647)
+		return (-2147483648);
+
+	return (-(int)result);
 }
