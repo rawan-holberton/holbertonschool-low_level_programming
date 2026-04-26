@@ -4,51 +4,75 @@
 
 /**
  * print_all - prints anything based on format
- * @format: list of types (c, i, f, s)
+ * @format: list of types
  *
  * Return: void
  */
+
+typedef struct print_op
+{
+	char *op;
+	void (*f)(va_list *);
+} print_op_t;
+
+void print_c(va_list *args)
+{
+	printf("%c", va_arg(*args, int));
+}
+
+void print_i(va_list *args)
+{
+	printf("%d", va_arg(*args, int));
+}
+
+void print_f(va_list *args)
+{
+	printf("%f", va_arg(*args, double));
+}
+
+void print_s(va_list *args)
+{
+	char *s = va_arg(*args, char *);
+
+	if (s == NULL)
+		s = "(nil)";
+	printf("%s", s);
+}
+
 void print_all(const char * const format, ...)
 {
-	unsigned int i = 0;
-	char *str;
+	unsigned int i = 0, j;
 	char *sep = "";
 	va_list args;
+
+	print_op_t ops[] = {
+		{"c", print_c},
+		{"i", print_i},
+		{"f", print_f},
+		{"s", print_s},
+		{NULL, NULL}
+	};
 
 	va_start(args, format);
 
 	while (format && format[i])
 	{
-		if (format[i] == 'c')
-		{
-			printf("%s%c", sep, va_arg(args, int));
-			sep = ", ";
-		}
-		else if (format[i] == 'i')
-		{
-			printf("%s%d", sep, va_arg(args, int));
-			sep = ", ";
-		}
-		else if (format[i] == 'f')
-		{
-			printf("%s%f", sep, va_arg(args, double));
-			sep = ", ";
-		}
-		else if (format[i] == 's')
-		{
-			str = va_arg(args, char *);
+		j = 0;
 
-			if (str == NULL)
-				str = "(nil)";
-
-			printf("%s%s", sep, str);
-			sep = ", ";
+		while (ops[j].op != NULL)
+		{
+			if (format[i] == ops[j].op[0])
+			{
+				printf("%s", sep);
+				ops[j].f(&args);
+				sep = ", ";
+				break;
+			}
+			j++;
 		}
-
 		i++;
 	}
 
 	printf("\n");
-
 	va_end(args);
 }
